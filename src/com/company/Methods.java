@@ -2,30 +2,27 @@ package com.company;
 
 import java.io.*;
 
-public class Methods  {
-    public void serialize(Object o) throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream("kcjscjcl");
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+public class Methods <P>{
 
-        objectOutputStream.writeObject(o);
+    public static <P> void serialize(P object, String path){
+        try (OutputStream fileOutputStream = new FileOutputStream(path);
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)){
+            objectOutputStream.writeObject(object);
 
-        objectOutputStream.close();
-        fileOutputStream.close();
-        System.out.println("Object was serialized!");
-
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+        }
     }
-    public  Object deserialize() throws IOException, ClassNotFoundException{
-        FileInputStream fileInputStream = new FileInputStream("jd jhdjh b");
-        ObjectInputStream objectInputStream= new ObjectInputStream(fileInputStream);
 
-        Object object = objectInputStream.readObject();
+    public static Object deserialize(String path){
+        Object newObject = new Object();
 
-        objectInputStream.close();
-        fileInputStream.close();
-        System.out.println("Object was Deserialized!");
-
-        return object;
-
-
+        try (InputStream fileInputStream = new FileInputStream(path);
+             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)){
+            newObject = objectInputStream.readObject();
+        } catch (IOException | ClassNotFoundException e){
+            System.out.println(e.getMessage());
+        }
+        return newObject;
     }
 }
